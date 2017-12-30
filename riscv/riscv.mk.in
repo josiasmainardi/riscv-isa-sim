@@ -21,6 +21,7 @@ riscv_hdrs = \
 	tracer.h \
 	extension.h \
 	rocc.h \
+	accelerator.h \
 	insn_template.h \
 	mulhi.h \
 	gdbserver.h \
@@ -41,6 +42,7 @@ riscv_srcs = \
 	extension.cc \
 	extensions.cc \
 	rocc.cc \
+	accelerator.cc \
 	regnames.cc \
 	devices.cc \
 	rom.cc \
