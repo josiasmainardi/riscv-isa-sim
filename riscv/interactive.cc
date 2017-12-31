@@ -4,7 +4,7 @@
 #include "disasm.h"
 #include "sim.h"
 #include "mmu.h"
-#include "../dummy_accelerator/dummy_accelerator.h"
+#include "dummy_accelerator.h"
 #include <sys/mman.h>
 #include <termios.h>
 #include <map>
@@ -232,22 +232,32 @@ void sim_t::interactive_reg(const std::string& cmd, const std::vector<std::strin
 
 void sim_t::interactive_vreg(const std::string& cmd, const std::vector<std::string>& args)
 {
-  fprintf(stderr, "Vregs Called\n");
-
-  // if (args.size() >= 1) {
-  //   // Show all the vregs!
-  //   processor_t *p = get_core(args[0]);
-  //   dummy_accelerator_t* accelerator = static_cast<dummy_accelerator_t*>(p->get_extension());
-  //   if (accelerator)
-  //   {
-  //     for (int r = 0; r < VECTOR_REGISTERS; ++r) {
-  //       fprintf(stderr, "%-4d:\n", r);
-  //       for (int w = 0; w < VECTOR_REGISTER_WORDS; w++) {
-  //         fprintf(stderr, "  0x%08\n", accelerator->vector_register[vrd][position]);
-  //       }
-  //     }
-  //   }
-  // }
+  if (args.size() >= 1) {
+    // Show all the vregs!
+    processor_t *p = get_core(args[0]);
+    dummy_accelerator_t* accelerator = static_cast<dummy_accelerator_t*>(p->get_extension());
+    if (accelerator)
+    {
+      int rstart, rend;
+      if (args.size() == 2) {
+        rstart = atoi(args[1].c_str());
+        rend = rstart+1;
+      } else {
+        rstart = 0;
+        rend = VECTOR_REGISTERS;
+      } 
+      for (int r = rstart; r < rend; ++r) {
+        fprintf(stderr, "\nVreg %4d:\n", r);
+        for (int w = 0; w < VECTOR_REGISTER_WORDS; w++) {
+          fprintf(stderr, "0x%08" PRIx64 "  ", accelerator->vector_register[r][w]);
+          if ((w + 1) % 4 == 0)
+            fprintf(stderr, "\n");
+        }
+      }
+    } else {
+      fprintf(stderr, "Accelerator Extension is not loaded.\n");
+    }
+  } 
 }
 
 union fpr
