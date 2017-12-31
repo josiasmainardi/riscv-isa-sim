@@ -4,6 +4,7 @@
 #include "disasm.h"
 #include "sim.h"
 #include "mmu.h"
+#include "../dummy_accelerator/dummy_accelerator.h"
 #include <sys/mman.h>
 #include <termios.h>
 #include <map>
@@ -64,6 +65,7 @@ void sim_t::interactive()
   funcs["r"] = funcs["run"];
   funcs["rs"] = &sim_t::interactive_run_silent;
   funcs["reg"] = &sim_t::interactive_reg;
+  funcs["vreg"] = &sim_t::interactive_vreg;
   funcs["fregs"] = &sim_t::interactive_fregs;
   funcs["fregd"] = &sim_t::interactive_fregd;
   funcs["pc"] = &sim_t::interactive_pc;
@@ -112,6 +114,7 @@ void sim_t::interactive_help(const std::string& cmd, const std::vector<std::stri
   std::cerr <<
     "Interactive commands:\n"
     "reg <core> [reg]                # Display [reg] (all if omitted) in <core>\n"
+    "vreg <core> [reg]               # Display [vreg] (all if omitted) in <core>\n"
     "fregs <core> <reg>              # Display single precision <reg> in <core>\n"
     "fregd <core> <reg>              # Display double precision <reg> in <core>\n"
     "pc <core>                       # Show current PC in <core>\n"
@@ -225,6 +228,26 @@ void sim_t::interactive_reg(const std::string& cmd, const std::vector<std::strin
     }
   } else
     fprintf(stderr, "0x%016" PRIx64 "\n", get_reg(args));
+}
+
+void sim_t::interactive_vreg(const std::string& cmd, const std::vector<std::string>& args)
+{
+  fprintf(stderr, "Vregs Called\n");
+
+  // if (args.size() >= 1) {
+  //   // Show all the vregs!
+  //   processor_t *p = get_core(args[0]);
+  //   dummy_accelerator_t* accelerator = static_cast<dummy_accelerator_t*>(p->get_extension());
+  //   if (accelerator)
+  //   {
+  //     for (int r = 0; r < VECTOR_REGISTERS; ++r) {
+  //       fprintf(stderr, "%-4d:\n", r);
+  //       for (int w = 0; w < VECTOR_REGISTER_WORDS; w++) {
+  //         fprintf(stderr, "  0x%08\n", accelerator->vector_register[vrd][position]);
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 union fpr

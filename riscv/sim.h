@@ -75,6 +75,7 @@ private:
   void interactive_run_noisy(const std::string& cmd, const std::vector<std::string>& args);
   void interactive_run_silent(const std::string& cmd, const std::vector<std::string>& args);
   void interactive_reg(const std::string& cmd, const std::vector<std::string>& args);
+  void interactive_vreg(const std::string& cmd, const std::vector<std::string>& args);
   void interactive_fregs(const std::string& cmd, const std::vector<std::string>& args);
   void interactive_fregd(const std::string& cmd, const std::vector<std::string>& args);
   void interactive_pc(const std::string& cmd, const std::vector<std::string>& args);
